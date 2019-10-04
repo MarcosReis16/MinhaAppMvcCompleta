@@ -8,3 +8,5 @@ Instalar o AutoMapper:
 Install-Package AutoMapper.Extensions.Microsoft.DependencyInjection
 
 VS Extension: Comment Remover - Está no Visual Studio Marketplace
+
+Adicionar - Cliente Side Library - font-awesome
