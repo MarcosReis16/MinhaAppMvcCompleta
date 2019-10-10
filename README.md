@@ -9,4 +9,6 @@ Install-Package AutoMapper.Extensions.Microsoft.DependencyInjection
 
 VS Extension: Comment Remover - Está no Visual Studio Marketplace
 
-Adicionar - Cliente Side Library - font-awesome
+Adicionar - Cliente Side Library - font-awesome para usar ícones em botões.
+
+https://fluentvalidation.net/ Para validação do modelo de negócios.
