@@ -35,8 +35,6 @@ namespace DevIO.Data.Context
                 property.Relational().ColumnType = "varchar(100)";
             }
 
-
-
             base.OnModelCreating(modelBuilder);
         }
     }
