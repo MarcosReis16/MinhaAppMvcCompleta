@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
 using DevIO.Business.Models.Validations;
+using DevIO.Business.Notifications;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -10,9 +12,16 @@ namespace DevIO.Business.Services
 {
     public abstract class BaseService
     {
+        private readonly INotificador _notificador;
+
+        protected BaseService(INotificador notificador)
+        {
+            _notificador = notificador;
+        }
+
         protected void Notificar(string mensagem)
         {
-            //Propagar o erro até a camada de apresentação
+            _notificador.Handle(new Notificacao(mensagem));
 
         }
 

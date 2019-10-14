@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DevIO.App.Data;
+﻿using AutoMapper;
 using DevIO.App.ViewModels;
 using DevIO.Business.Interfaces;
-using AutoMapper;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace DevIO.App.Controllers
 {
@@ -19,11 +15,17 @@ namespace DevIO.App.Controllers
     {
         private readonly IProdutoRepository _produtoRepository;
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IProdutoService _produtoService;
 
-        public ProdutosController(IProdutoRepository produtoRepository, IFornecedorRepository fornecedorRepository, IMapper mapper) : base(mapper)
+        public ProdutosController(IProdutoRepository produtoRepository,
+                                  IFornecedorRepository fornecedorRepository,
+                                  IProdutoService produtoService,
+                                  INotificador notificador,
+                                  IMapper mapper) : base(mapper, notificador)
         {
             _produtoRepository = produtoRepository;
             _fornecedorRepository = fornecedorRepository;
+            _produtoService = produtoService;
         }
 
         [Route("lista-de-produtos")]
@@ -64,7 +66,9 @@ namespace DevIO.App.Controllers
             if (!await UploadArquivo(produtoViewModel.ImagemUpload, imgPrefixo)) return View(produtoViewModel);
 
             produtoViewModel.Imagem = imgPrefixo + produtoViewModel.ImagemUpload.FileName;
-            await _produtoRepository.Adicionar(_mapper.Map<Produto>(produtoViewModel));
+            await _produtoService.Adicionar(_mapper.Map<Produto>(produtoViewModel));
+
+            if (!OperacaoValida()) return View(produtoViewModel);
 
             return RedirectToAction("Index");
         }
@@ -109,7 +113,9 @@ namespace DevIO.App.Controllers
             produtoAtualizacao.Valor = produtoViewModel.Valor;
             produtoAtualizacao.Ativo = produtoViewModel.Ativo;
 
-            await _produtoRepository.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
+            await _produtoService.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
+
+            if (!OperacaoValida()) return View(produtoViewModel);
 
             return RedirectToAction("Index");
         }
@@ -131,7 +137,11 @@ namespace DevIO.App.Controllers
             var produtoViewModel = await ObterProduto(id);
             if (produtoViewModel == null) return NotFound();
 
-            await _produtoRepository.Remover(id);
+            await _produtoService.Remover(id);
+
+            if (!OperacaoValida()) return View(produtoViewModel);
+
+            TempData["Sucesso"] = "Produto excluído com sucesso!";
 
             return RedirectToAction("Index");
         }
