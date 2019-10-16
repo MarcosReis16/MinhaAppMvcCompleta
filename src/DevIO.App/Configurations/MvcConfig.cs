@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DevIO.App.Configurations
@@ -24,6 +20,8 @@ namespace DevIO.App.Configurations
                     o.ModelBindingMessageProvider.SetValueIsInvalidAccessor((x) => "O valor preenchido é invalido para este campo.");
                     o.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(x => "O campo deve ser numérico.");
                     o.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(x => "Este campo precisa ser preenchido");
+
+                    o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }
             ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
