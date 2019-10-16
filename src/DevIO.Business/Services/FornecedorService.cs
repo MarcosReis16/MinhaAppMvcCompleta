@@ -57,7 +57,7 @@ namespace DevIO.Business.Services
         {
             if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
 
-            await _enderecoRepository.Adicionar(endereco);
+            await _enderecoRepository.Atualizar(endereco);
         }
 
         public async Task Remover(Guid id)
