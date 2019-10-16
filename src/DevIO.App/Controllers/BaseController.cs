@@ -17,7 +17,7 @@ namespace DevIO.App.Controllers
 
         protected bool OperacaoValida()
         {
-            return !(_notificador.TemNotificacao());
+            return !_notificador.TemNotificacao();
         }
             
     }
